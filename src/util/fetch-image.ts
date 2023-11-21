@@ -33,7 +33,7 @@ export const fetchImage = async (
     "https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v1-0/image-to-image",
     {
       headers: {
-        Authorization: `Bearer sk-DxMTg0eRrS8oBrbHnvnkoB5rHll97NRJjpJasZpYXsRyzrl9`,
+        Authorization: `Bearer sk-DxMTg0eRrS8oBrbHnvnkoB5rHll97NRJjpJasZpYXsRyzrl`,
       },
       body: formData,
       method: "POST",
