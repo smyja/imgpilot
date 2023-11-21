@@ -33,7 +33,7 @@ export const fetchImage = async (
     "https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v1-0/image-to-image",
     {
       headers: {
-        Authorization: `Bearer sk-DxMTg0eRrS8oBrbHnvnkoB5rHll97NRJjpJasZpYXsRyzrl`,
+        Authorization: `Bearer sk-DxMTg0eRrS8oBrbHnvnkoB5rHll97NRJjpJasZpYXsRyzrl9`,
       },
       body: formData,
       method: "POST",
@@ -45,6 +45,18 @@ export const fetchImage = async (
     throw new Error("Failed to fetch image");
   }
 
-  const resultBlob = await response.blob();
-  return await blobToBase64(resultBlob);
+  const resultData = await response.json();
+
+  if (!resultData.artifacts || !Array.isArray(resultData.artifacts)) {
+    throw new Error("Invalid response format");
+  }
+
+  const images = await Promise.all(
+    resultData.artifacts.map(async (artifact: any) => {
+      const imageBlob = await fetch(artifact.base64).then((r) => r.blob());
+      return await blobToBase64(imageBlob);
+    })
+  );
+
+  return images;
 };
